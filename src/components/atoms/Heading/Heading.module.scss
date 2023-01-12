@@ -1,0 +1,28 @@
+@use '@/styles/config/variables' as *;
+@use '@/styles/util/functions/rem' as *;
+
+.heading {
+  font-weight: bold;
+  line-height: 1.7;
+  margin: 0;
+  padding: 0;
+}
+
+h1.heading {
+  font-size: rem($fontSizeXXXLg);
+}
+h2.heading {
+  font-size: rem($fontSizeXXLg);
+}
+h3.heading {
+  font-size: rem($fontSizeXLg);
+}
+h4.heading {
+  font-size: rem($fontSizeLg);
+}
+h5.heading {
+  font-size: rem($fontSizeMd);
+}
+h6.heading {
+  font-size: rem($fontSizeSm);
+}

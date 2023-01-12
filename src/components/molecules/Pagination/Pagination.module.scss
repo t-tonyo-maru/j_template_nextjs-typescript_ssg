@@ -1,0 +1,17 @@
+@use '@/styles/config/variables' as *;
+
+.paginationWrapper {
+  height: 100%;
+  width: 100%;
+}
+
+.pagination {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.paginationItem {
+  height: 30px;
+  width: 30px;
+}

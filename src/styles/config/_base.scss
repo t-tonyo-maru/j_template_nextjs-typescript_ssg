@@ -1,0 +1,25 @@
+@use '@/styles/config/variables' as *;
+@use '@/styles/util/mixins/phone-link' as *;
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  @include set-disable-phone-link-in-sp();
+
+  color: $colorText;
+  font-family: $fontFamily;
+  font-feature-settings: 'palt' 1;
+  line-height: 1.6;
+}
+
+* {
+  box-sizing: border-box;
+  outline: none;
+
+  &::before,
+  &::after {
+    box-sizing: border-box;
+  }
+}

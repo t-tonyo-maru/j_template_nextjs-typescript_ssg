@@ -1,0 +1,22 @@
+@use '@/styles/config/variables' as *;
+@use '@/styles/util/mixins/media-query' as *;
+@use '@/styles/util/functions/rem' as *;
+
+.footer {
+  background-color: #333;
+  color: $white;
+}
+
+.inner {
+  font-size: rem($fontSizeMd);
+  margin: 0 auto;
+  max-width: $pcContentMaxWidth;
+  padding: 20px $pcGutterWidth;
+  text-align: center;
+  width: 100%;
+
+  @include sp {
+    max-width: $spContentMaxWidth;
+    padding: 20px 0;
+  }
+}

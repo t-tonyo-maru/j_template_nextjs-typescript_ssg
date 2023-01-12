@@ -1,0 +1,37 @@
+@use '@/styles/config/variables' as *;
+@use '@/styles/util/functions/rem' as *;
+@use '@/styles/util/mixins/media-query' as *;
+
+.header {
+  background-color: lighten($link, 30%);
+  left: 0;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+
+  // @include sp {}
+}
+
+.inner {
+  font-size: rem($fontSizeMd);
+  margin: 0 auto;
+  max-width: $pcContentMaxWidth;
+  padding: 20px $pcGutterWidth;
+  width: 100%;
+
+  @include sp {
+    max-width: $spContentMaxWidth;
+    padding: 20px 0;
+  }
+}
+
+.links {
+  li {
+    display: inline-block;
+    margin-right: 12px;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+}

@@ -1,0 +1,55 @@
+@use '@/styles/config/variables' as *;
+@use '@/styles/util/functions/rem' as *;
+@use '@/styles/util/mixins/hoverEffect' as *;
+
+.breadcrumbWrapper {
+  height: 100%;
+  width: 100%;
+}
+
+.breadcrumb {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.breadcrumbItem {
+  position: relative;
+  margin-right: 20px;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  &::after {
+    content: '/';
+    font-size: rem($fontSizeSm);
+    line-height: 1;
+    position: absolute;
+    right: -12px;
+    top: 0;
+  }
+
+  &:last-of-type {
+    &::after {
+      display: none;
+    }
+  }
+}
+
+.breadcrumbLink {
+  @include hoverEffect;
+
+  font-size: rem($fontSizeSm);
+  line-height: 1;
+  text-decoration: none;
+
+  &.current {
+    color: $colorText02;
+
+    &:hover {
+      transition: none;
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,35 @@
+@use 'sass:math';
+@use '@/styles/config/variables' as *;
+@use '@/styles/util/mixins/media-query' as *;
+
+.modal {
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  transition: all 0.3s;
+  transform: scale(0.9);
+  width: 100%;
+  z-index: -1;
+
+  &.isShow {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 9999;
+  }
+}
+
+.modalContent {
+  display: block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 480px;
+  width: 100%;
+
+  @include sp {
+    max-width: math.percentage(math.div(330, 375));
+  }
+}

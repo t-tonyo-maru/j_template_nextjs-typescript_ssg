@@ -1,0 +1,13 @@
+{
+  "title": "basic title",
+  "keywords": "keyword1, keyword2, keyword3",
+  "description": "description test",
+  "ogTitle": "basic og: title",
+  "ogDescription": "basic og: description",
+  "ogType": "website",
+  "ogUrl": "basic url",
+  "ogImage": "https://ssg-template.jp/assets/image/ogp_image.png",
+  "ogSiteName": "basic og: site_name",
+  "ogLocale": "ja_JP",
+  "twitterCard": "summary"
+}

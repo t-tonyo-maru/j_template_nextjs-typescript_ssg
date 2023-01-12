@@ -1,0 +1,65 @@
+@use '@/styles/config/variables' as *;
+@use '@/styles/util/functions/rem' as *;
+@use '@/styles/util/mixins/hoverEffect' as *;
+
+.button {
+  @include hoverEffect;
+
+  align-items: center;
+  background-color: $primary;
+  border: none;
+  border-radius: $borderRadiusSizeMd;
+  color: $colorTextWhite;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: rem($fontSizeMd);
+  font-weight: bold;
+  height: 100%;
+  line-height: 1;
+  justify-content: center;
+  outline: none;
+  text-decoration: none;
+  width: 100%;
+
+  // 背景色カラー
+  &.primary {
+    background-color: $primary;
+  }
+  &.info {
+    background-color: $info;
+  }
+  &.success {
+    background-color: $success;
+  }
+  &.warning {
+    background-color: $warning;
+    color: $colorText;
+  }
+  &.danger {
+    background-color: $danger;
+  }
+
+  // フォントサイズ
+  &.fontSizeSm {
+    font-size: rem($fontSizeSm);
+  }
+
+  &.fontSizeMd {
+    font-size: rem($fontSizeMd);
+  }
+
+  &.fontSizeLg {
+    font-size: rem($fontSizeLg);
+  }
+
+  // 非活性
+  &.disabled {
+    background-color: $disabled;
+    cursor: not-allowed;
+
+    &:hover {
+      opacity: 1;
+      transition: none;
+    }
+  }
+}

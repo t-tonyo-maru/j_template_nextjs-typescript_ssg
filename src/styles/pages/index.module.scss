@@ -1,0 +1,13 @@
+// .indexPage {}
+
+.links {
+  li {
+    height: 60px;
+    margin-bottom: 20px;
+    width: 300px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}

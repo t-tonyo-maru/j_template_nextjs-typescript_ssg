@@ -1,0 +1,40 @@
+@use '@/styles/config/variables' as *;
+@use '@/styles/util/functions/rem' as *;
+@use '@/styles/util/mixins/hoverEffect' as *;
+
+.buttonPagination {
+  @include hoverEffect;
+
+  align-items: center;
+  border: 1px solid $colorBorder02;
+  border-radius: $borderRadiusSizeMd;
+  cursor: pointer;
+  color: $darker;
+  display: inline-flex;
+  font-size: rem($fontSizeXSm);
+  font-weight: bold;
+  height: 100%;
+  line-height: 1;
+  justify-content: center;
+  outline: none;
+  text-decoration: none;
+  width: 100%;
+
+  // 現在表示中のページ
+  &.current {
+    background-color: $darker;
+    color: $white;
+  }
+
+  // 非活性
+  &.disabled {
+    background-color: $disabled;
+    color: $white;
+    cursor: not-allowed;
+
+    &:hover {
+      opacity: 1;
+      transition: none;
+    }
+  }
+}

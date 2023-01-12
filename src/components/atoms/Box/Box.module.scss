@@ -1,0 +1,11 @@
+@use '@/styles/config/variables' as *;
+@use '@/styles/util/mixins/boxShadow' as *;
+
+.box {
+  @include boxShadow($darker);
+
+  background-color: $white;
+  border-radius: $borderRadiusSizeMd;
+  height: 100%;
+  width: 100%;
+}
