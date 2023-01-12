@@ -1,0 +1,1 @@
+# j_template_nextjs-typescript_ssg
