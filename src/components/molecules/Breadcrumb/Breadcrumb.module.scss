@@ -14,6 +14,8 @@
 }
 
 .breadcrumbItem {
+  display: flex;
+  align-items: center;
   position: relative;
   margin-right: 20px;
 
@@ -22,12 +24,16 @@
   }
 
   &::after {
-    content: '/';
-    font-size: rem($fontSizeSm);
-    line-height: 1;
+    content: '';
+    display: block;
+    border-left: 1px solid black;
+    height: calc(100% - 2px);
+    width: 2px;
     position: absolute;
-    right: -12px;
-    top: 0;
+    right: -0.75em;
+    top: 2px;
+    transform: rotate(15deg);
+
   }
 
   &:last-of-type {

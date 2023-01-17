@@ -39,7 +39,7 @@ export const Modal = ({
       <Overlay handleClose={coloseModal} />
       <div className={style.modalContent}>
         <Box>
-          <div style={{ fontSize: '1.6rem', padding: '20px' }}>
+          <div style={{ padding: '20px' }}>
             <p>モーダルの中身です。</p>
             <hr />
             <a onClick={coloseModal}>閉じる</a>
