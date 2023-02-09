@@ -2,7 +2,7 @@
   "name": "j_template_nextjs-typescript_ssg",
   "version": "0.1.0",
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "scripts": {
     "dev": "next dev",
@@ -17,7 +17,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json,scss}'",
-    "typedoc": "npx typedoc --readme none --cleanOutputDir true --excludeExternals false --exclude '**/*+(.test|.spec|.e2e)*+(.ts|.js)' --exclude '**/*+(.tsx|.jsx|.d.ts)' --exclude '**/*+(.hook|.hooks)*+(.tsx|.jsx|.ts|.js)' --entryPointStrategy expand --out ./tsdoc/ ./src/"
+    "typedoc": "npx typedoc --readme none --cleanOutputDir true --excludeExternals false --exclude '**/*+(.test|.spec|.e2e)*+(.ts|.js)' --exclude '**/*+(.tsx|.jsx|.d.ts)' --exclude '**/*+(.hook|.hooks)*+(.tsx|.jsx|.ts|.js)' --entryPointStrategy expand --out ./tsdoc/ ./src/",
+    "clean:cache": "npm cache clean --force"
   },
   "dependencies": {
     "axios": "^1.1.0",
