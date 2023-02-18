@@ -1,4 +1,4 @@
-// react / next
+// lib
 import React from 'react'
 // style
 import style from './Sidebar.module.scss'

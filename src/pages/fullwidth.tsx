@@ -1,4 +1,4 @@
-// next/react
+// lib
 import type { NextPage } from 'next'
 import React from 'react'
 // components

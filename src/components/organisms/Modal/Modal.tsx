@@ -1,4 +1,4 @@
-// react
+// lib
 import React from 'react'
 // module
 import cn from 'classnames'

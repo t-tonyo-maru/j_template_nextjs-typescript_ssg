@@ -1,4 +1,4 @@
-// react
+// lib
 import { useMemo } from 'react'
 // types
 export type UseSetLinksType = Readonly<{

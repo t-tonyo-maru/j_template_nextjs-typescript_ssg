@@ -1,4 +1,4 @@
-// react
+// lib
 import { useReducer, useCallback } from 'react'
 
 // Stateの型

@@ -1,4 +1,4 @@
-// react
+// lib
 import React from 'react'
 // moudle
 import cn from 'classnames'

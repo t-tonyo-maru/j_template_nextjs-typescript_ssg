@@ -1,10 +1,10 @@
-// react / next
+// lib
 import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
-// store
-import { StoreProvider } from '@/store/index'
+// recoil
+import { RecoilRoot } from 'recoil'
 // assets
 import * as gtag from '@/assets/ts/gtag/gtag'
 // global style
@@ -35,9 +35,9 @@ const App = ({ Component, pageProps }: AppProps) => {
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
         <title>{meta.title}</title>
       </Head>
-      <StoreProvider>
+      <RecoilRoot>
         <Component {...pageProps} />
-      </StoreProvider>
+      </RecoilRoot>
     </>
   )
 }

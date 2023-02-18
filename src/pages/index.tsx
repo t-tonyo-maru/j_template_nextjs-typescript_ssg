@@ -1,11 +1,16 @@
-// next/react
+// lib
 import type { NextPage } from 'next'
 import React from 'react'
 import Head from 'next/head'
+import { useRecoilValue } from 'recoil'
 // hooks
 import { useScrollStop } from '@/hooks/useScrollStop/useScrollStop.hooks'
-import { useError } from '@/hooks/useError/useError.hooks'
 import { useModal } from '@/components/organisms/Modal/Modal.hooks'
+// store
+import { todosState, todosSizeState } from '@/store/todo/selector'
+import { useUpdateTodos } from '@/store/todo/update'
+import { errorsState, errorsCountState } from '@/store/error/selector'
+import { useUpdateErrors } from '@/store/error/update'
 // components
 import { Box } from '@/components/atoms/Box/Box'
 import { Button } from '@/components/atoms/Button/Button'
@@ -13,12 +18,8 @@ import { Icon } from '@/components/atoms/Icon/Icon'
 import { Heading } from '@/components/atoms/Heading/Heading'
 import { Modal } from '@/components/organisms/Modal/Modal'
 import { OneColumn } from '@/components/templates/OneColumn/OneColumn'
-// store
-import { useContextStore } from '@/store/index'
 // style
 import style from '@/styles/pages/index.module.scss'
-// assets
-import { createResultMap } from '@/assets/ts/createResultMap/createResultMap'
 // metas
 import meta from '@/assets/json/meta/meta.json'
 
@@ -26,14 +27,19 @@ import meta from '@/assets/json/meta/meta.json'
 // console.log(process.env.NEXT_PUBLIC_DOMAIN)
 
 const IndexPage: NextPage = () => {
-  // グローバルステートを取得
-  const { globalState, setGlobalState } = useContextStore()
-  // useError を読み込んで、グローバルステートのエラーオブジェクト更新を管理する
-  const { setError, resetError, hasGlobalError, getGlobalError } = useError()
   // Modal コンポーネントを制御するカスタムフック
   const { isInit, isModalShow, setIsModalShow } = useModal()
   // スクロール禁止を担うhooksを読み込む
   const { setScrollStopState } = useScrollStop()
+
+  // recoil todo
+  const todos = useRecoilValue(todosState)
+  const todosSize = useRecoilValue(todosSizeState)
+  const updateTodos = useUpdateTodos()
+  // recoil errors
+  const errors = useRecoilValue(errorsState)
+  const errorsSize = useRecoilValue(errorsCountState)
+  const updateErrors = useUpdateErrors()
 
   /**
    * handleModal
@@ -53,41 +59,20 @@ const IndexPage: NextPage = () => {
   }
 
   /**
-   * updateGlobalUser
-   * グローバルステートの状態を更新する
-   */
-  const updateGlobalUser = () => {
-    // name 更新
-    setGlobalState({
-      type: 'SetUserName',
-      name: '山田花子'
-    })
-    // mail 更新
-    setGlobalState({
-      type: 'SetMail',
-      mail: 'yamada@hanako.co.jp'
-    })
-  }
-
-  /**
    * maybeErrorFunc
    * エラーが発生するかもしれない関数
-   * createResultMapのサンプルコード
    */
   const maybeErrorFunc = () => {
-    const getRandomNum = () => {
-      const r = Math.random()
-      if (r < 0.2) {
-        throw new Error('getRandomNum内エラー')
-      }
-      return r
-    }
-    const result = createResultMap<number>(getRandomNum)
-    if (result.get('data')) {
-      console.log('成功: ', result.get('data'))
-    }
-    if (result.get('error')) {
-      console.log('エラー: ', result.get('error'))
+    if (Math.random() >= 0.5) {
+      updateErrors({
+        type: 'SET',
+        payload: {
+          newError: {
+            errorCode: '0000',
+            error: new Error('不明なエラーが発生しました。')
+          }
+        }
+      })
     }
   }
 
@@ -130,46 +115,88 @@ const IndexPage: NextPage = () => {
               モーダル表示ボタン
             </Button>
           </li>
-          <li>
-            <Button colorType='danger' handleClick={maybeErrorFunc}>
-              createResultMap テスト | エラーが起きるかもしれない関数を実行する
-            </Button>
-          </li>
-          <li>
-            <Button colorType='danger' handleClick={setError}>
-              エラー発生ボタン
-            </Button>
-          </li>
-          <li>
-            <Button
-              colorType='danger'
-              handleClick={resetError}
-              isDisabled={!hasGlobalError}
-            >
-              エラーリセットボタン
-            </Button>
-          </li>
         </ul>
         <br />
         <Box>
           <div style={{ padding: '16px' }}>
-            <button onClick={updateGlobalUser}>グローバルステート更新</button>
-            <hr />
-            <p>グローバルステートの値を表示</p>
             <ul>
-              <li>id: {globalState.user.id}</li>
-              <li>name: {globalState.user.name}</li>
-              <li>mail: {globalState.user.mail}</li>
+              {todos.map((todo) => {
+                return (
+                  <li key={todo.id}>
+                    <p>{todo.title}</p>
+                    <p>{todo.isComplete ? '完了' : '未完'}</p>
+                  </li>
+                )
+              })}
             </ul>
-            <pre>
-              {hasGlobalError && typeof getGlobalError('000') !== 'undefined' && (
-                <div>
-                  <pre>{getGlobalError('000')?.message}</pre>
-                  <pre>{getGlobalError('000')?.name}</pre>
-                  <pre>{getGlobalError('000')?.stack}</pre>
-                </div>
-              )}
-            </pre>
+            <br />
+            <p>TODOの総数: {todosSize}</p>
+            <br />
+            <ul className={style.links}>
+              <li>
+                <Button
+                  colorType='danger'
+                  handleClick={() => {
+                    updateTodos({
+                      type: 'ADD',
+                      payload: {
+                        title: '新しいタスクです'
+                      }
+                    })
+                  }}
+                >
+                  TODOを追加する
+                </Button>
+              </li>
+              <li>
+                <Button
+                  colorType='warning'
+                  handleClick={() => {
+                    updateTodos({
+                      type: 'RESET'
+                    })
+                  }}
+                >
+                  TODOを追加する
+                </Button>
+              </li>
+            </ul>
+          </div>
+        </Box>
+        <Box>
+          <div style={{ padding: '16px' }}>
+            <ul>
+              {errors.map((err) => {
+                return (
+                  <li key={err.id}>
+                    <p>Error Code: {err.errorCode}</p>
+                    <p>Error Message: {err.error.message}</p>
+                  </li>
+                )
+              })}
+            </ul>
+            <br />
+            <p>Errorの総数: {errorsSize}</p>
+            <br />
+            <ul className={style.links}>
+              <li>
+                <Button colorType='danger' handleClick={maybeErrorFunc}>
+                  エラーが起きる…かも
+                </Button>
+              </li>
+              <li>
+                <Button
+                  colorType='warning'
+                  handleClick={() => {
+                    updateErrors({
+                      type: 'RESET'
+                    })
+                  }}
+                >
+                  エラーをすべて解除する
+                </Button>
+              </li>
+            </ul>
           </div>
         </Box>
       </div>

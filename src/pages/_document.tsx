@@ -1,4 +1,4 @@
-// react / next
+// lib
 import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
 // metas
 import meta from '@/assets/json/meta/meta.json'

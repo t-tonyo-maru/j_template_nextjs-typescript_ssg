@@ -1,4 +1,4 @@
-// react
+// lib
 import React from 'react'
 // components
 import { ButtonPagination } from '@/components/atoms/ButtonPagination/ButtonPagination'

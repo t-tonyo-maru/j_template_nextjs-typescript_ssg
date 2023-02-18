@@ -1,4 +1,4 @@
-// next/react
+// lib
 import type { NextPage, GetStaticProps, GetStaticPropsResult } from 'next'
 import React, { useMemo } from 'react'
 import { useRouter } from 'next/router'

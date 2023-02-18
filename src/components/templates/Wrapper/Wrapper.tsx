@@ -1,4 +1,4 @@
-// react
+// lib
 import React from 'react'
 // style
 import style from './Wrapper.module.scss'

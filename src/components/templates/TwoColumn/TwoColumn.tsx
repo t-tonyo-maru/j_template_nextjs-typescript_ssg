@@ -1,4 +1,4 @@
-// react
+// lib
 import React from 'react'
 // components
 import Wrapper from '@/components/templates/Wrapper/Wrapper'

@@ -1,4 +1,4 @@
-// next/react
+// lib
 import type {
   NextPage,
   GetStaticProps,

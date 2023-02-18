@@ -16,12 +16,8 @@
     - [APIの返り値を元にページを生成](#APIの返り値を元にページを生成)
   - [その他のページ生成方法](#その他のページ生成方法)
   - [ダイナミックルート（Dynamic_Routes）](#ダイナミックルート（Dynamic_Routes）)
-- [グローバルステートの状態管理](#グローバルステートの状態管理)
-  - [TEA](#TEA)
-    - [TEAとグローバルステート実装例の対応表](#TEAとグローバルステート実装例の対応表)
-  - [グローバルステートの組み込み方](#グローバルステートの組み込み方)
-  - [グローバルステートの外し方](#グローバルステートの外し方)
-  - [グローバルステートの代替案](#グローバルステートの代替案)
+- [recoil](#recoil)
+  - [recoilの組み込み方](#recoilの組み込み方)
   - [アプリのエラーハンドリング](#アプリのエラーハンドリング)
 - [hooks](#hooks)
 - [コンポーネント](#コンポーネント)
@@ -108,8 +104,7 @@
 |   |   └── templates … templates コンポーネントを格納
 |   ├── hooks … プロジェクトで共通のカスタムフックを格納。
 |   ├── pages … page コンポーネントを格納
-|   ├── store … グローバルステートを格納
-|   |   └── index.tsx … グローバルステートのサンプルファイル
+|   ├── store … recoil のコードを格納
 |   └── styles … scss を格納
 |       ├── config … scss の設定ファイルを格納
 |       ├── common … プロジェクトで共通化する scss を格納
@@ -238,106 +233,39 @@ next.js では、pages/ 配下のファイル名を`[]`で囲ったファイル�
 詳しくは以下をご確認ください。  
 [> Dynamic Routes | next.js](https://nextjs.org/docs/advanced-features/dynamic-import)
 
-## グローバルステートの状態管理
+## recoil
 
-アプリ全体の状態管理として、React hooks と useContext を使っています。  
-`/src/store/index.tsx` にサンプルのグローバルステートを用意しています。
+アプリ全体の状態管理として [recoil](https://recoiljs.org/) を導入しています。  
+`/src/store/todo` にサンプルコードを実装しています。
 
-### TEA
+### recoilの組み込み方
 
-本テンプレートでは、グローバルステートの状態管理に[TEA（The Elm Architecture）](https://guide.elm-lang.jp/architecture/)の考え方を採用しています。  
-TEA は[TEA 公式ページ](https://guide.elm-lang.jp/architecture/)でも触れられているように、Redux や Vuex の基礎となった考え方です。  
-TEA を取り入れる事で、複雑な状態管理を型安全かつシンプルな構造に保てます。
+本テンプレートでは、以下のようにして recoil を適用しています。
 
-参考
+1. `/src/store/` 配下に、recoil 関連のファイルをひとまとめにして格納する
+   - type.ts: atom で定義するデータの型を記載
+   - atom.ts: atom を記載
+   - selector.ts: selector を記載
+   - update.ts: atom を更新するロジックを記載
+   - XXX.test.tsx: recoil 関連のテストファイル
+2. `/src/pages/_app.tsx` の `<Component {...pageProps} />` を `<RecoilRoot>` で囲みます。
+3. 各ページで `selector.ts` と `update.ts` を読み込んで、共通ステートを表示・更新します。
+   - サンプルファイルとして `/src/store/index.tsx` に読み込んでいます。
 
-- [TEA 公式ページ](https://guide.elm-lang.jp/architecture/)
-- [React Hooks API で The Elm Architecture](https://zenn.dev/eagle/articles/react-tea-hook)
-
-#### TEAとグローバルステート実装例の対応表
-
-本テンプレートでは、TEA を下記の表にように輸入しています。  
-`/src/store/index.tsx` に、そのサンプルを実装しています。
-
-| 本テンプレート (React x TypeScript)                | TEA (Elm) |
-| -------------------------------------------------- | --------- |
-| state / ModelType                                  | Model     |
-| &lt;Store.Provider&gt; 配下の jsx                  | View      |
-| update(グローバルステート用 useReducer の更新関数) | Update    |
-| MessageType                                        | Msg       |
-
-TEA の考え方を取り入れてはいますが、状態管理の方法自体は、React の useReducer の基本的な使い方に則っています。  
-ただ TEA を取り入れた事で大きく変更になったのが、Msg に相当する MessageType です。
-
-慣習的に [useReducer](https://ja.reactjs.org/docs/hooks-reference.html#usereducer) は、更新関数に `{ state: {...}, action: { type: ..., payload: ... }}` の引数を取ります。  
-本テンプレートでは、上記の `action.type` を TEA の[バリアント](https://guide.elm-lang.jp/types/custom_types.html)のように扱っています。
-
-これにより、useReducer の更新関数の `switch` 文で厳密な型判定が可能になります。  
-また、MessageType に[ジェネリクス](https://typescript-jp.gitbook.io/deep-dive/type-system/generics)を持たせる事で、柔軟な拡張が可能です。
-
-##### おまけ
-
-- `/src/store/index.tsx` のグローバルステート実装例は、オブジェクトの合併型を用いていますが、同じような事は [TypeScript タプル](https://typescript-jp.gitbook.io/deep-dive/type-system#tapuru)でも可能できます。お好みの方法で実装してください。
-- バリアントを再現するためには、[TypeScript enum](https://typescript-jp.gitbook.io/deep-dive/type-system/enums) を用いた方が良いのでは？…と思われるかもしれませんが、[TypeScript の enum はデメリットがある](https://engineering.linecorp.com/ja/blog/typescript-enum-tree-shaking/)ため、代わりに合併型を使っています。
-
-### グローバルステートの組み込み方
-
-本テンプレートでは、以下のようにしてグローバルステートを適用しています。
-
-1. `/src/store/` 配下に、グローバルステートを管理する `.tsx` ファイルを作成する
-2. 1.で作成したファイル内で、`useReducer` を使って、グローバルステートの原型を作成します。
-3. `createContext` を使って、2.で作成した原型をもとに、グローバルステートを作成します。
-   グローバルステートは外部ファイルで読み込めるように `export` します。
-4. アプリへグローバルストアを供給する `StoreProvider` を作成します。
-   `StoreProvider` も外部ファイルで読み込めるように `export` します。
-5. `/src/pages/_app.tsx` に `StoreProvider` を読み込み、`<Component {...pageProps} />` を囲みます。
-6. これで各ページ・コンポーネントでグローバルステートが参照できるようになります。
-
-サンプルファイルとして `/src/store/index.tsx` を用意しています。  
-グローバルステートを適用する場合は、このファイルを参考にしてみてください。
-
-また、グローバルステートを作成する時は、**1 アプリ = 1 グローバルステート**の構成することをオススメします。  
-グローバルステートを単一にする事で、アプリの状態・フローをシンプルに保てます。
-
-### グローバルステートの外し方
-
-前述の通り、本テンプレートでは簡単なグローバルステートのサンプルを実装しています。  
-グローバルステートが不要な場合は、以下の手順でテンプレートから関連の処理、および、ファイルを削除してください。
-
-1. `/src/store/` を格納されたファイルごと削除する
-2. `/src/pages/_app.tsx` の `/src/store/` から読み込んでいるモジュールをすべて削除する
-3. `/src/pages/_app.tsx` の `<Component {...pageProps} />` を囲っている Provider を削除する
-4. `/src/pages/index.tsx` の `/src/store/` から読み込んでいるモジュールをすべて削除する
-   - この際に、グローバルステートの更新関数や、jsx に展開されたグローバルステートの値など、関連する変数や関数はすべて削除します。
-5. 適宜、エラーの解消を行う。
-
-### グローバルステートの代替案
-
-本テンプレートでは `createContext`や`useReducer`を利用したグローバルステートのサンプルコードを実装していますが、もちろん、他のライブラリを利用しても構いません。  
-以下が React/Next における有名な状態管理ライブラリです。個人的には Jotai を推奨します。
-
-- [> Redux](https://redux.js.org/)
-- [> Jotai](https://jotai.org/)
-- [> Zustand](https://zustand-demo.pmnd.rs/)
-- [> Recoil](https://recoiljs.org/)
-  - Recoil は Production 版リリース前なので、注意!
+recoil を外す時は、上記の逆順で対応してください。
 
 ### アプリのエラーハンドリング
 
 JavaScript クライアントアプリの問題点として、エラーハンドリングが場当たり的になりやすい問題があります。
-JavaScript ではエラーが発生した際、アプリの状態復元やハンドリングが難しいためです。
-
-本テンプレートでは、グローバルステートにエラーオブジェクトを保存できるようにして、アプリ内で発生するエラーを管理するアプローチを採用しています。  
-グローバルステートのエラーオブジェクト（Map オブジェクト）内に、アプリケーションで発生するすべてのエラーを set することで、各コンポーネントから共通のエラーを参照・更新することが可能です。  
-これにより、エラーが発生した時の挙動を開発者がカスタマイズできます。
-
-この実装方法は、エラーを特別なケースとして扱うのではなく、データとして扱う[TEA のエラーハンドリング](https://guide.elm-lang.jp/error_handling/)を参考にしています。
+本テンプレートでは recoil にエラーオブジェクトを保存できるようにして、アプリ内で発生するエラーを管理するアプローチを採用しています。  
+これはエラーを特別なケースとして扱うのではなく、データとして扱う[TEA のエラーハンドリング](https://guide.elm-lang.jp/error_handling/)を参考にしています。
 
 以下が、関連するサンプルファイルです。
 
-- `/src/store/index.tsx`
-- `/src/hooks/useError/useError.hooks.tsx`
-- `/src/@types/apis/error.ts`
+- `/src/store/error/atom.ts`
+- `/src/store/error/selector.ts`
+- `/src/store/error/type.ts`
+- `/src/store/error/update.ts`
 
 また、[Rust の Result 型](https://doc.rust-lang.org/std/result/)を、TypeScript（JavaScript）の Map オブジェクトを用いて、擬似的に再現するコードを実装しています。  
 エラーが発生しうる関数や、副作用を扱う関数を実行する場合は、利用してみてください。
